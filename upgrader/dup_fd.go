@@ -1,6 +1,6 @@
 // +build !windows
 
-package tableflip
+package upgrader
 
 import (
 	"fmt"
