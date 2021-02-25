@@ -53,13 +53,15 @@ func main() {
 		for {
 			c, err := ln.Accept()
 			if err != nil {
+				fmt.Println("conn close:",err)
 				return
 			}
-
 			go func() {
-				c.SetDeadline(time.Now().Add(time.Second))
-				c.Write([]byte("It is a mistake to think you can solve any major problems just with potatoes.\n"))
-				c.Close()
+				for {
+					c.SetDeadline(time.Now().Add(time.Second))
+					c.Write([]byte(fmt.Sprintf("Hello at %s\n",time.Now().Format("2006-01-02 15:04:04"))))
+					time.Sleep(5*time.Second)
+				}
 			}()
 		}
 	}()
