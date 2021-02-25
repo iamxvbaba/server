@@ -54,14 +54,24 @@ func main() {
 		for {
 			c, err := ln.Accept()
 			if err != nil {
-				fmt.Println("conn close:",err)
-				return
+				panic(err)
 			}
 			go func() {
 				for {
 					c.SetDeadline(time.Now().Add(time.Second))
-					c.Write([]byte(fmt.Sprintf("Hello at %s\n",time.Now().Format("2006-01-02 15:04:04"))))
+					_, e := c.Write([]byte(fmt.Sprintf("Hello at %s\n",time.Now().Format("2006-01-02 15:04:04"))))
+					if e != nil {
+						return
+					}
 					time.Sleep(5*time.Second)
+				}
+			}()
+			go func() {
+				data := make([]byte,128)
+				_,e := c.Read(data)
+				if e != nil {
+					fmt.Println("断开：",e)
+					return
 				}
 			}()
 		}
