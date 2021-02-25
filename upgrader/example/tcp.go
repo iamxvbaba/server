@@ -33,6 +33,7 @@ func main() {
 		sig := make(chan os.Signal, 1)
 		signal.Notify(sig, syscall.SIGHUP)
 		for range sig {
+			fmt.Println("进行升级!!!!!!!")
 			err := upg.Upgrade()
 			if err != nil {
 				log.Println("upgrade failed:", err)
@@ -66,7 +67,7 @@ func main() {
 		}
 	}()
 
-	log.Printf("ready")
+	fmt.Println("ready!!!!!!!!!")
 	if err := upg.Ready(); err != nil {
 		panic(err)
 	}
