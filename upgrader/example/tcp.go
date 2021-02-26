@@ -30,6 +30,7 @@ func main() {
 	// Do an upgrade on SIGHUP
 	go func() {
 		if *doUpgrade {
+			time.Sleep(3*time.Second)
 			fmt.Println("进行升级!!!!!!!")
 			err := upg.Upgrade()
 			if err != nil {
