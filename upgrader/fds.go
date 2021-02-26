@@ -155,9 +155,10 @@ func (f *Fds) listenerLocked(network, addr string) (net.Listener, error) {
 	key := fileName{listenKind, network, addr}
 	file := f.inherited[key]
 	if file == nil {
+		fmt.Println("原本没有在监听！！！！")
 		return nil, nil
 	}
-
+	fmt.Println("原来有在监听<<<<<<<<<<<")
 	ln, err := net.FileListener(file.File)
 	if err != nil {
 		return nil, fmt.Errorf("can't inherit listener %s %s: %s", network, addr, err)
