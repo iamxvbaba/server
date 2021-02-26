@@ -22,6 +22,7 @@ type parent struct {
 
 func newParent(env *env) (*parent, map[fileName]*file, error) {
 	if env.getenv(sentinelEnvVar) == "" {
+		fmt.Println("没有子进程!!!!!")
 		return nil, make(map[fileName]*file), nil
 	}
 
