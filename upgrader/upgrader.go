@@ -209,16 +209,20 @@ func (u *Upgrader) run() {
 	for {
 		select {
 		case <-parentExited:
+			fmt.Println("<-parentExited")
 			parentExited = nil
 
 		case <-processReady:
+			fmt.Println("<-processReady")
 			processReady = nil
 
 		case <-u.stopC:
+			fmt.Println("<-u.stopC")
 			u.Fds.closeAndRemoveUsed()
 			return
 
 		case request := <-u.upgradeC:
+			fmt.Println("<-u.upgradeC")
 			if processReady != nil {
 				request <- errNotReady
 				continue
@@ -233,9 +237,8 @@ func (u *Upgrader) run() {
 			request <- err
 
 			if err == nil {
-				// Save file in exitFd, so that it's only closed when the process
-				// exits. This signals to the new process that the old process
-				// has exited.
+				// 将文件保存在excitEd中，以便仅在进程退出时关闭文件。
+				// 这向新进程发出信号，表明旧进程已退出。
 				u.exitFd <- neverCloseThisFile{file}
 				u.Fds.closeUsed()
 				return

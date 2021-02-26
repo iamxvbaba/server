@@ -6,15 +6,14 @@ import (
 	"github.com/iamxvbaba/server/upgrader"
 	"log"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
 func main() {
 	var (
 		listenAddr = flag.String("listen", "localhost:8080", "`Address` to listen on")
-		pidFile    = flag.String("pid-file", "", "`Path` to pid file")
+		pidFile    = flag.String("pid-file", "./run_pid", "`Path` to pid file")
+		doUpgrade = flag.Bool("dup",false,"use upgrade")
 	)
 
 	flag.Parse()
@@ -30,9 +29,7 @@ func main() {
 
 	// Do an upgrade on SIGHUP
 	go func() {
-		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGHUP)
-		for range sig {
+		if *doUpgrade {
 			fmt.Println("进行升级!!!!!!!")
 			err := upg.Upgrade()
 			if err != nil {

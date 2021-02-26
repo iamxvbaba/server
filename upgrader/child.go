@@ -16,8 +16,7 @@ type child struct {
 }
 
 func startChild(env *env, passedFiles map[fileName]*file) (*child, error) {
-	// These pipes are used for communication between parent and child
-	// readyW is passed to the child, readyR stays with the parent
+	// 这些管道用于parent与child之间的通信
 	readyR, readyW, err := os.Pipe()
 	if err != nil {
 		return nil, fmt.Errorf("pipe failed: %s", err)
