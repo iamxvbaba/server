@@ -59,7 +59,7 @@ func main() {
 			}
 			go func() {
 				for {
-					_, e := c.Write([]byte(fmt.Sprintf("Hello at %s\n",time.Now().Format("2006-01-02 15:04:04"))))
+					_, e := c.Write([]byte(fmt.Sprintf("Hello 2 at %s\n",time.Now().Format("2006-01-02 15:04:04"))))
 					if e != nil {
 						return
 					}
