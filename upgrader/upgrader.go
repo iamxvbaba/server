@@ -108,7 +108,7 @@ func newUpgrader(env *env, opts Options) (*Upgrader, error) {
 }
 
 
-// 表示当前进程已准备好接受连接。
+//表示当前进程已准备好接受连接。
 //必须调用它才能完成升级。
 //调用Ready之后，将关闭所有继承但未使用的fds。
 func (u *Upgrader) Ready() error {

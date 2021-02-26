@@ -33,7 +33,7 @@ func newParent(env *env) (*parent, map[fileName]*file, error) {
 	if err := dec.Decode(&names); err != nil {
 		return nil, nil, fmt.Errorf("can't decode names from parent process: %s", err)
 	}
-
+	fmt.Println("names:",names)
 	files := make(map[fileName]*file)
 	for i, parts := range names {
 		var key fileName
