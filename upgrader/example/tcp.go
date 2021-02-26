@@ -15,7 +15,7 @@ func main() {
 	var (
 		listenAddr = flag.String("listen", "localhost:8080", "`Address` to listen on")
 		pidFile    = flag.String("pid-file", "./run_pid", "`Path` to pid file")
-		doUpgrade = flag.Bool("dup",false,"use upgrade")
+		//doUpgrade = flag.Bool("dup",false,"use upgrade")
 	)
 
 	flag.Parse()
