@@ -64,7 +64,7 @@ func start(app AppInstance) {
 	// Do an upgrade on SIGHUP
 	go func() {
 		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGHUP, syscall.SIGILL)
+		signal.Notify(sig, syscall.SIGHUP, syscall.SIGILL,syscall.SIGINT)
 		switch x := <-sig; x {
 		case syscall.SIGHUP:
 			Log.Printf("app:%s 进行升级!!!!!!!", app.Name())
