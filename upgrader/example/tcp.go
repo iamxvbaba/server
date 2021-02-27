@@ -36,12 +36,11 @@ func main() {
 	go func() {
 		sig := make(chan os.Signal, 1)
 		signal.Notify(sig, syscall.SIGHUP)
-		for range sig {
-			log.Println("进行升级!!!!!!!")
-			err := upg.Upgrade()
-			if err != nil {
-				log.Println("upgrade failed:", err)
-			}
+		<- sig
+		log.Println("进行升级!!!!!!!")
+		err := upg.Upgrade()
+		if err != nil {
+			log.Println("upgrade failed:", err)
 		}
 	}()
 

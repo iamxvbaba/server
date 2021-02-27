@@ -240,6 +240,9 @@ func (u *Upgrader) run() {
 			if err == nil {
 				// 将文件保存在excitEd中，以便仅在进程退出时关闭文件。
 				// 这向新进程发出信号，表明旧进程已退出。
+
+				// 等待10s, 以便过渡
+				time.Sleep(10*time.Second)
 				u.exitFd <- neverCloseThisFile{file}
 				u.Fds.closeUsed()
 				return
