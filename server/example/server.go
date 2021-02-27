@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/iamxvbaba/server/server"
 	"github.com/iamxvbaba/server/upgrader"
-	"log"
 	"time"
 )
 
@@ -25,22 +25,22 @@ func (s *Server) Version() string {
 }
 
 func (s *Server) Initialize(ctx context.Context) error {
-	log.Println("app Initialize")
+	server.Log.Println("app Initialize")
 	return nil
 }
 
 func (s *Server) Serve(ctx context.Context, upg *upgrader.Upgrader) {
-	log.Println("app Serve!!!!")
+	server.Log.Println("app Serve!!!!")
 	ln, err := upg.Fds.Listen("tcp", "0.0.0.0:18541")
 	if err != nil {
-		log.Fatalln("Can't listen:", err)
+		server.Log.Fatalln("Can't listen:", err)
 	}
 	defer ln.Close()
-	log.Printf("listening on %s", ln.Addr())
+	server.Log.Printf("listening on %s", ln.Addr())
 	for {
 		c, err := ln.Accept()
 		if err != nil {
-			log.Printf("listening error:%v", err)
+			server.Log.Printf("listening error:%v", err)
 			continue
 		}
 		go func() {
@@ -56,16 +56,16 @@ func (s *Server) Serve(ctx context.Context, upg *upgrader.Upgrader) {
 			data := make([]byte,128)
 			_,e := c.Read(data)
 			if e != nil {
-				log.Println("断开：",e)
+				server.Log.Println("断开：",e)
 				return
 			}
-			log.Printf("client data:%s",data)
+			server.Log.Printf("client data:%s",data)
 		}()
 	}
 }
 
 func (s *Server) Destroy() {
-	log.Println("app Destroy")
+	server.Log.Println("app Destroy")
 }
 
 func (s *Server) Daemon() bool {

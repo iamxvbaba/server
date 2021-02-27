@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/iamxvbaba/server/upgrader"
-	"log"
 	"math/rand"
 	"os"
 	"os/signal"
@@ -43,11 +42,11 @@ func start(app AppInstance) {
 	if app == nil {
 		panic("app instance is nil")
 	}
-	log.SetPrefix(fmt.Sprintf("[app_%s_%d]",app.Name(), os.Getpid()))
+	Log.SetPrefix(fmt.Sprintf("[app_%s_%d]",app.Name(), os.Getpid()))
 	if err = app.Initialize(ctx); err != nil {
 		panic(err)
 	}
-	log.Printf("app:%s version:%s is running \n", app.Name(), app.Version())
+	Log.Printf("app:%s version:%s is running \n", app.Name(), app.Version())
 	if upg, err = upgrader.New(upgrader.Options{
 		PIDFile: fmt.Sprintf("%s_run_pid", app.Name()),
 	}); err != nil {
@@ -56,7 +55,7 @@ func start(app AppInstance) {
 	go app.Serve(ctx, upg)
 
 	defer func() {
-		log.Printf("app:%s version:%s stop\n", app.Name(), app.Version())
+		Log.Printf("app:%s version:%s stop\n", app.Name(), app.Version())
 		cancel()
 		app.Destroy()
 		upg.Stop()
@@ -67,10 +66,10 @@ func start(app AppInstance) {
 		sig := make(chan os.Signal, 1)
 		signal.Notify(sig, syscall.SIGHUP)
 		<-sig
-		log.Printf("app:%s 进行升级!!!!!!!", app.Name())
+		Log.Printf("app:%s 进行升级!!!!!!!", app.Name())
 		err := upg.Upgrade()
 		if err != nil {
-			log.Println("upgrade failed:", err)
+			Log.Println("upgrade failed:", err)
 		}
 	}()
 	if err := upg.Ready(); err != nil {
