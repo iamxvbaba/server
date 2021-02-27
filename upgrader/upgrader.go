@@ -242,7 +242,7 @@ func (u *Upgrader) run() {
 				// 这向新进程发出信号，表明旧进程已退出。
 
 				// 等待10s, 以便过渡
-				time.Sleep(10*time.Second)
+				// time.Sleep(10*time.Second)
 				u.exitFd <- neverCloseThisFile{file}
 				u.Fds.closeUsed()
 				return
