@@ -34,7 +34,7 @@ func main() {
 		sig := make(chan os.Signal, 1)
 		signal.Notify(sig, syscall.SIGHUP)
 		for range sig {
-			fmt.Println("进行升级!!!!!!!")
+			log.Println("进行升级!!!!!!!")
 			err := upg.Upgrade()
 			if err != nil {
 				log.Println("upgrade failed:", err)
@@ -59,7 +59,7 @@ func main() {
 			}
 			go func() {
 				for {
-					_, e := c.Write([]byte(fmt.Sprintf("Hello 2 at %s\n",time.Now().Format("2006-01-02 15:04:04"))))
+					_, e := c.Write([]byte(fmt.Sprintf("Hello at %s\n",time.Now().Format("2006-01-02 15:04:04"))))
 					if e != nil {
 						return
 					}
@@ -70,14 +70,14 @@ func main() {
 				data := make([]byte,128)
 				_,e := c.Read(data)
 				if e != nil {
-					fmt.Println("断开：",e)
+					log.Println("断开：",e)
 					return
 				}
 			}()
 		}
 	}()
 
-	fmt.Println("ready!!!!!!!!!")
+	log.Println("ready!!!!!!!!!")
 	if err := upg.Ready(); err != nil {
 		panic(err)
 	}

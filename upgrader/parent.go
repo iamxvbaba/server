@@ -22,7 +22,7 @@ type parent struct {
 
 func newParent(env *env) (*parent, map[fileName]*file, error) {
 	if env.getenv(sentinelEnvVar) == "" {
-		fmt.Println("没有子进程!!!!!")
+	//	log.Println("没有子进程!!!!!")
 		return nil, make(map[fileName]*file), nil
 	}
 
@@ -34,7 +34,7 @@ func newParent(env *env) (*parent, map[fileName]*file, error) {
 	if err := dec.Decode(&names); err != nil {
 		return nil, nil, fmt.Errorf("can't decode names from parent process: %s", err)
 	}
-	fmt.Println("names:",names)
+	//log.Println("names:",names)
 	files := make(map[fileName]*file)
 	for i, parts := range names {
 		var key fileName
@@ -43,7 +43,9 @@ func newParent(env *env) (*parent, map[fileName]*file, error) {
 		// Start at 5 to account for stdin, etc. and write
 		// and read pipes.
 		fd := 5 + i
+		// 设置关闭文件只对当前进程有效
 		env.closeOnExec(fd)
+
 		files[key] = &file{
 			env.newFile(uintptr(fd), key.String()),
 			uintptr(fd),

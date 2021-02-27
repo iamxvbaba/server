@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"os/signal"
@@ -42,17 +42,17 @@ func start(app AppInstance) {
 	if err = app.Initialize(ctx); err != nil {
 		panic(err)
 	}
-	fmt.Printf("app:%s version:%s is running \n", app.Name(), app.Version())
+	log.Printf("app:%s version:%s is running \n", app.Name(), app.Version())
 	go app.Serve(ctx)
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt, sigTerm)
 
 	s := <-ch
-	fmt.Printf("app:%s version:%s exit by signal:%v \n", app.Name(), app.Version(), s)
+	log.Printf("app:%s version:%s exit by signal:%v \n", app.Name(), app.Version(), s)
 
 	cancel()
 	app.Destroy()
 
-	fmt.Printf("app:%s version:%s exit \n", app.Name(), app.Version())
+	log.Printf("app:%s version:%s exit \n", app.Name(), app.Version())
 }

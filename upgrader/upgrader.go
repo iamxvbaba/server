@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"os"
 	"path/filepath"
@@ -209,20 +210,20 @@ func (u *Upgrader) run() {
 	for {
 		select {
 		case <-parentExited:
-			fmt.Println("<-parentExited")
+			log.Println("<-parentExited")
 			parentExited = nil
 
 		case <-processReady:
-			fmt.Println("<-processReady")
+			log.Println("<-processReady")
 			processReady = nil
 
 		case <-u.stopC:
-			fmt.Println("<-u.stopC")
+			log.Println("<-u.stopC")
 			u.Fds.closeAndRemoveUsed()
 			return
 
 		case request := <-u.upgradeC:
-			fmt.Println("<-u.upgradeC")
+			log.Println("<-u.upgradeC")
 			if processReady != nil {
 				request <- errNotReady
 				continue
@@ -248,7 +249,9 @@ func (u *Upgrader) run() {
 }
 
 func (u *Upgrader) doUpgrade() (*os.File, error) {
+
 	child, err := startChild(u.env, u.Fds.copy())
+
 	if err != nil {
 		return nil, fmt.Errorf("can't start child: %s", err)
 	}
