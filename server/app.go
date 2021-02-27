@@ -42,7 +42,7 @@ func start(app AppInstance) {
 	if app == nil {
 		panic("app instance is nil")
 	}
-	Log.SetPrefix(fmt.Sprintf("[app_%s_%d]",app.Name(), os.Getpid()))
+	Log.SetPrefix(fmt.Sprintf("[app_%s_%d]", app.Name(), os.Getpid()))
 	if err = app.Initialize(ctx); err != nil {
 		panic(err)
 	}
@@ -64,12 +64,17 @@ func start(app AppInstance) {
 	// Do an upgrade on SIGHUP
 	go func() {
 		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGHUP)
-		<-sig
-		Log.Printf("app:%s 进行升级!!!!!!!", app.Name())
-		err := upg.Upgrade()
-		if err != nil {
-			Log.Println("upgrade failed:", err)
+		signal.Notify(sig, syscall.SIGHUP, syscall.SIGILL)
+		switch x := <-sig; x {
+		case syscall.SIGHUP:
+			Log.Printf("app:%s 进行升级!!!!!!!", app.Name())
+			err := upg.Upgrade()
+			if err != nil {
+				Log.Println("upgrade failed:", err)
+			}
+		default:
+			Log.Printf("app:%s 退出 sigal:%v", app.Name(), x)
+			upg.Stop()
 		}
 	}()
 	if err := upg.Ready(); err != nil {
