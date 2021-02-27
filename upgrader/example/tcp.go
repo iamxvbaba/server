@@ -27,7 +27,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer upg.Stop()
+	defer func() {
+		log.Println("退出程序")
+		upg.Stop()
+	}()
 
 	// Do an upgrade on SIGHUP
 	go func() {
