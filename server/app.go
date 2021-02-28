@@ -52,7 +52,7 @@ func start(app AppInstance) {
 		Log.Fatal(err)
 	}
 	Log.Printf("app:%s version:%s is running \n", app.Name(), app.Version())
-	go app.Serve(ctx)
+	go app.Serve(ctx,upg)
 	defer func() {
 		Log.Printf("app:%s version:%s stop\n", app.Name(), app.Version())
 		cancel()
