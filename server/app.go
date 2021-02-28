@@ -42,7 +42,11 @@ func start(app AppInstance) {
 	if app == nil {
 		panic("app instance is nil")
 	}
-
+	if upg, err = upgrader.New(upgrader.Options{
+		PIDFile: fmt.Sprintf("%s_run_pid", app.Name()),
+	}); err != nil {
+		Log.Fatal(err)
+	}
 	Log.SetPrefix(fmt.Sprintf("[app_%s_%d]", app.Name(), os.Getpid()))
 	if err = app.Initialize(ctx,upg); err != nil {
 		Log.Fatal(err)
