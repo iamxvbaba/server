@@ -43,7 +43,7 @@ func start(app AppInstance) {
 		panic("app instance is nil")
 	}
 	Log.SetPrefix(fmt.Sprintf("[app_%s_%d]", app.Name(), os.Getpid()))
-	if err = app.Initialize(ctx); err != nil {
+	if err = app.Initialize(ctx,upg); err != nil {
 		panic(err)
 	}
 	Log.Printf("app:%s version:%s is running \n", app.Name(), app.Version())
@@ -52,7 +52,7 @@ func start(app AppInstance) {
 	}); err != nil {
 		panic(err)
 	}
-	go app.Serve(ctx, upg)
+	go app.Serve(ctx)
 
 	defer func() {
 		Log.Printf("app:%s version:%s stop\n", app.Name(), app.Version())
