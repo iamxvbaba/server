@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"github.com/iamxvbaba/server/server"
 	"github.com/iamxvbaba/server/upgrader"
+	"net"
 	"time"
 )
 
 type Server struct {
-
+	ln net.Listener
 }
 
 func New() *Server{
@@ -24,21 +25,37 @@ func (s *Server) Version() string {
 	return "v0.0.2"
 }
 
-func (s *Server) Initialize(ctx context.Context) error {
+func (s *Server) Initialize(ctx context.Context, upg *upgrader.Upgrader) error {
+	var err error
+	s.ln, err = upg.Fds.Listen("tcp", "0.0.0.0:18541")
+	if err != nil {
+		return err
+	}
 	server.Log.Println("app Initialize")
 	return nil
 }
 
-func (s *Server) Serve(ctx context.Context, upg *upgrader.Upgrader) {
+func (s *Server) Serve(ctx context.Context) {
 	server.Log.Println("app Serve!!!!")
-	ln, err := upg.Fds.Listen("tcp", "0.0.0.0:18541")
-	if err != nil {
-		server.Log.Fatalln("Can't listen:", err)
-	}
-	defer ln.Close()
-	server.Log.Printf("listening on %s", ln.Addr())
+	s.normal()
+	// s.tcpStart()
+}
+
+func (s *Server) Destroy() {
+	server.Log.Println("app Destroy")
+}
+
+func (s *Server) Daemon() bool {
+	return true
+}
+func (s *Server) normal() {
+	server.Log.Println("normal server start!!!")
+}
+func (s *Server) tcpStart() {
+	defer s.ln.Close()
+	server.Log.Printf("listening on %s", s.ln.Addr())
 	for {
-		c, err := ln.Accept()
+		c, err := s.ln.Accept()
 		if err != nil {
 			server.Log.Printf("listening error:%v", err)
 			continue
@@ -63,12 +80,3 @@ func (s *Server) Serve(ctx context.Context, upg *upgrader.Upgrader) {
 		}()
 	}
 }
-
-func (s *Server) Destroy() {
-	server.Log.Println("app Destroy")
-}
-
-func (s *Server) Daemon() bool {
-	return true
-}
-
