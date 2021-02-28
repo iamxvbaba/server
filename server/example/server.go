@@ -26,12 +26,12 @@ func (s *Server) Version() string {
 }
 
 func (s *Server) Initialize(ctx context.Context, upg *upgrader.Upgrader) error {
+	server.Log.Println("app Initialize")
 	var err error
 	s.ln, err = upg.Fds.Listen("tcp", "0.0.0.0:18541")
 	if err != nil {
 		return err
 	}
-	server.Log.Println("app Initialize")
 	return nil
 }
 
