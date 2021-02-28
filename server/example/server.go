@@ -35,7 +35,7 @@ func (s *Server) Initialize(ctx context.Context, upg *upgrader.Upgrader) error {
 	return nil
 }
 
-func (s *Server) Serve(ctx context.Context) {
+func (s *Server) Serve(ctx context.Context,upg *upgrader.Upgrader) {
 	server.Log.Println("app Serve!!!!")
 	s.normal()
 	// s.tcpStart()

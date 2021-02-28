@@ -15,7 +15,7 @@ type AppInstance interface {
 	Name() string
 	Version() string
 	Initialize(ctx context.Context, upg *upgrader.Upgrader) error
-	Serve(ctx context.Context)
+	Serve(ctx context.Context, upg *upgrader.Upgrader)
 	Destroy()
 	Daemon() bool
 }
