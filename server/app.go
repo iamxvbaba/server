@@ -42,18 +42,13 @@ func start(app AppInstance) {
 	if app == nil {
 		panic("app instance is nil")
 	}
+
 	Log.SetPrefix(fmt.Sprintf("[app_%s_%d]", app.Name(), os.Getpid()))
 	if err = app.Initialize(ctx,upg); err != nil {
-		panic(err)
+		Log.Fatal(err)
 	}
 	Log.Printf("app:%s version:%s is running \n", app.Name(), app.Version())
-	if upg, err = upgrader.New(upgrader.Options{
-		PIDFile: fmt.Sprintf("%s_run_pid", app.Name()),
-	}); err != nil {
-		panic(err)
-	}
 	go app.Serve(ctx)
-
 	defer func() {
 		Log.Printf("app:%s version:%s stop\n", app.Name(), app.Version())
 		cancel()
@@ -78,7 +73,7 @@ func start(app AppInstance) {
 		}
 	}()
 	if err := upg.Ready(); err != nil {
-		panic(err)
+		Log.Fatal(err)
 	}
 	<-upg.Exit()
 }

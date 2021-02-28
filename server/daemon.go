@@ -16,6 +16,6 @@ func daemon() {
 
 	Log.Println("start with daemon......")
 	if err = cmd.Start(); err != nil {
-		panic(err)
+		Log.Fatal(err)
 	}
 }
