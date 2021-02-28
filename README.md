@@ -36,7 +36,7 @@ func (s *Server) Version() string {
 	return "v0.0.2"
 }
 
-func (s *Server) Initialize(ctx context.Context) error {
+func (s *Server) Initialize(ctx context.Context, upg *upgrader.Upgrader) error {
 	server.Log.Println("app Initialize")
 	return nil
 }
