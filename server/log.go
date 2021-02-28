@@ -10,5 +10,5 @@ func init(){
 	if nil != err {
 		panic(err)
 	}
-	Log = lg.New(f, "mw", lg.Ldate|lg.Ltime|lg.Lshortfile)
+	Log = lg.New(f, "[mw]", lg.Ldate|lg.Ltime|lg.Lshortfile)
 }
