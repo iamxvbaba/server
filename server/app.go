@@ -18,6 +18,7 @@ type AppInstance interface {
 	Serve(ctx context.Context, upg *upgrader.Upgrader)
 	Destroy()
 	Daemon() bool
+	Wait()
 }
 
 func Run(app AppInstance) {
@@ -67,12 +68,15 @@ func start(app AppInstance) {
 		switch x := <-sig; x {
 		case syscall.SIGHUP:
 			Log.Printf("app:%s 进行升级!!!!!!!", app.Name())
+			app.Wait()
+			Log.Printf("app:%s 进行升级,app.Wait..", app.Name())
 			err := upg.Upgrade()
 			if err != nil {
 				Log.Println("upgrade failed:", err)
 			}
 		default:
 			Log.Printf("app:%s 退出 sigal:%v", app.Name(), x)
+			Log.Printf("app:%s 退出,app.Wait...", app.Name())
 			upg.Stop()
 		}
 	}()

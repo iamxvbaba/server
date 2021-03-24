@@ -6,11 +6,13 @@ import (
 	"github.com/iamxvbaba/server/server"
 	"github.com/iamxvbaba/server/upgrader"
 	"net"
+	"sync"
 	"time"
 )
 
 type Server struct {
 	ln net.Listener
+	wait *sync.WaitGroup
 }
 
 func New() *Server{
@@ -79,4 +81,7 @@ func (s *Server) tcpStart() {
 			server.Log.Printf("client data:%s",data)
 		}()
 	}
+}
+func (s *Server) Wait(){
+	s.wait.Wait()
 }
