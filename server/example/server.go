@@ -48,7 +48,7 @@ func (s *Server) Destroy() {
 }
 
 func (s *Server) Daemon() bool {
-	return true
+	return false
 }
 func (s *Server) normal() {
 	server.Log.Println("normal server start!!!")

@@ -52,18 +52,12 @@ var (
 	stdEnvUpgrader *Upgrader
 )
 
-var ErrNotSupported = errors.New("upgrader: platform does not support graceful restart")
 
-// 新建将创建一个新的升级程序。文件是从父级传递的，可能为空。
+//New  新建将创建一个新的升级程序。文件是从父级传递的，可能为空。
 //只有第一次对该函数的调用将成功。可能返回Err Not Supported。
 func New(opts Options) (upg *Upgrader, err error) {
 	stdEnvMu.Lock()
 	defer stdEnvMu.Unlock()
-
-	// 只支持类Unix系统
-	if !isSupportedOS() {
-		return nil, fmt.Errorf("%w", ErrNotSupported)
-	}
 
 	if stdEnvUpgrader != nil {
 		return nil, errors.New("upgrader: only a single Upgrader allowed")
@@ -109,7 +103,7 @@ func newUpgrader(env *env, opts Options) (*Upgrader, error) {
 }
 
 
-//表示当前进程已准备好接受连接。
+//Ready 表示当前进程已准备好接受连接。
 //必须调用它才能完成升级。
 //调用Ready之后，将关闭所有继承但未使用的fds。
 func (u *Upgrader) Ready() error {

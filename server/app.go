@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
 	"time"
 )
@@ -80,8 +81,10 @@ func start(app AppInstance) {
 			upg.Stop()
 		}
 	}()
-	if err := upg.Ready(); err != nil {
-		Log.Fatal(err)
+	if runtime.GOOS != "windows" {
+		if err := upg.Ready(); err != nil {
+			Log.Fatal(err)
+		}
 	}
 	<-upg.Exit()
 }
